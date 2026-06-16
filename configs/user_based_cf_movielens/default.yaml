@@ -1,0 +1,36 @@
+dataset:
+  name: movielens_100k
+  zip_path: tmp/ml-100k.zip
+  raw_dir: data/raw/movielens
+  processed_dir: data/processed/movielens
+  train_path: data/processed/movielens/ratings_train.parquet
+  test_path: data/processed/movielens/ratings_test.parquet
+  ratings_train_file: u1.base
+  ratings_test_file: u1.test
+  items_file: u.item
+  users_file: u.user
+  genres_file: u.genre
+
+preprocess:
+  overwrite: true
+
+schema:
+  rating_min: 1
+  rating_max: 5
+
+model:
+  name: user_based_cf
+  similarity: pearson
+  min_common_items: 2
+  top_k: 20
+
+output:
+  model_path: data/models/user_based_cf_movielens.pkl
+
+query:
+  user_id: 1
+  item_id: 1
+
+recommendation:
+  item_k: 10
+  neighbor_k: 20
