@@ -1,0 +1,48 @@
+dataset:
+  name: movielens_100k
+  zip_path: tmp/ml-100k.zip
+  raw_dir: data/raw/movielens
+  processed_dir: data/processed/movielens
+  train_path: data/processed/movielens/ratings_train.parquet
+  test_path: data/processed/movielens/ratings_test.parquet
+  ratings_train_file: u1.base
+  ratings_test_file: u1.test
+  items_file: u.item
+  users_file: u.user
+  genres_file: u.genre
+
+preprocess:
+  overwrite: true
+
+schema:
+  rating_min: 1
+  rating_max: 5
+
+model:
+  name: user_based_cf
+  similarity: pearson
+  min_common_items: 5
+  top_k: 20
+  similarity_shrinkage: 10
+
+output:
+  model_path: data/models/user_based_cf_movielens.pkl
+
+query:
+  user_id: 1
+  item_id: 1
+
+recommendation:
+  item_k: 10
+  neighbor_k: 40
+  relevant_rating_min: 4.0
+  min_neighbor_support: 2
+  score_shrinkage: 5
+  fallback_pool_size: 100
+  random_seed: 42
+
+comparison:
+  random_num_runs: 30
+  min_item_rating_count: 5
+  metrics_json_path: data/experiments/recommendation/comparison_metrics.json
+  metrics_csv_path: data/experiments/recommendation/comparison_metrics.csv
