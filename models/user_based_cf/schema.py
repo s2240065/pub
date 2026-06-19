@@ -13,6 +13,7 @@ class ModelConfig(BaseModel):
     similarity: str = "pearson"
     min_common_items: int = Field(ge=1)
     top_k: int = Field(ge=1)
+    similarity_shrinkage: float = Field(default=10.0, ge=0)
 
 
 class OutputConfig(BaseModel):
@@ -26,7 +27,12 @@ class QueryConfig(BaseModel):
 
 class RecommendationConfig(BaseModel):
     item_k: int = Field(default=10, ge=1)
-    neighbor_k: int = Field(default=20, ge=1)
+    neighbor_k: int = Field(default=40, ge=1)
+    relevant_rating_min: float = Field(default=4.0, ge=1, le=5)
+    min_neighbor_support: int = Field(default=2, ge=1)
+    score_shrinkage: float = Field(default=5.0, ge=0)
+    fallback_pool_size: int = Field(default=100, ge=1)
+    random_seed: int = 42
 
 
 class TrainConfig(BaseModel):
@@ -58,3 +64,6 @@ class RatingPrediction(BaseModel):
 class ItemRecommendation(BaseModel):
     item_id: int = Field(ge=1)
     predicted_rating: float = Field(ge=1, le=5)
+    rank_score: float = Field(ge=1, le=5)
+    neighbor_support: int = Field(ge=0)
+    source: str

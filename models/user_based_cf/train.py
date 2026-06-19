@@ -27,7 +27,11 @@ def train(cfg: DictConfig) -> dict[str, int | str]:
     model_path = _resolve_path(config.output.model_path)
     assert train_path.exists(), f"Train parquet not found: {train_path}"
     records = load_ratings_from_parquet(train_path)
-    model = UserBasedCFModel.fit(records=records, min_common_items=config.model.min_common_items)
+    model = UserBasedCFModel.fit(
+        records=records,
+        min_common_items=config.model.min_common_items,
+        similarity_shrinkage=config.model.similarity_shrinkage,
+    )
     assert model.user_ids
     assert model.item_ids
     save_model(model, model_path)
